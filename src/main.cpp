@@ -65,7 +65,9 @@ int main()
                 stringstream buffer;
                 buffer << in.rdbuf();
                 Tokenizer tokenizer;
-                auto tokens = tokenizer.tokenize(buffer.str());
+                cout << "正在词法分析..." << endl;
+                auto tokens = tokenizer.tokenize(buffer.str()); //buggggggggggggggg
+                cout << "词法分析完成" << endl;
                 if (writeTokensToFile(tokens, CurrentOutput))
                 {
                     cout << "写入文件失败" << endl;
@@ -73,7 +75,7 @@ int main()
                 }
                 else
                 {
-                    cout << "词法分析完成，结果已写入: " << CurrentOutput << endl;
+                    cout << "结果已写入: " << CurrentOutput << endl <<endl;
                 }
             }
         }

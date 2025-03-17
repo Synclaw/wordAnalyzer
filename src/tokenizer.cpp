@@ -162,44 +162,40 @@ std::vector<Token> Tokenizer::tokenize(const std::string &source)
 
         char c = source[pos];
 
-        switch (c)
+        if (pos + 1 < source.size() && source[pos] == '/' && (source[pos + 1] == '/' || source[pos + 1] == '*'))
         {
-        case '/':
             handleComment(pos, source); // 处理注释
-            break;
-        case '.':
-            if (pos + 1 < source.size() && isdigit(source[pos + 1]))
-            {
-                tokens.push_back(handleNumber(pos, source)); // 处理浮点数
-            }
-            else
-            {
-                tokens.push_back(handleDelimiter(pos, source)); // 处理分隔符
-            }
-            break;
-        default:
-            if (isalpha(c) || c == '_')
-            {
-                tokens.push_back(handleIdentifier(pos, source)); // 处理标识符
-            }
-            else if (isdigit(c))
-            {
-                tokens.push_back(handleNumber(pos, source)); // 处理数字
-            }
-            else if (isOperatorChar(c))
-            {
-                tokens.push_back(handleOperator(pos, source)); // 处理操作符
-            }
-            else if (isDelimiter(c))
-            {
-                tokens.push_back(handleDelimiter(pos, source)); // 处理分隔符
-            }
-            else
-            {
-                tokens.push_back(handleError(pos, source)); // 处理错误
-            }
-            break;
         }
+        else if (isdigit(source[pos + 1]))
+        {
+            tokens.push_back(handleNumber(pos, source)); // 处理浮点数
+        }
+        else if (isDelimiter(c))
+        {
+            tokens.push_back(handleDelimiter(pos, source)); // 处理分隔符
+        }
+        else if (isalpha(c) || c == '_')
+        {
+            tokens.push_back(handleIdentifier(pos, source)); // 处理标识符
+        }
+        else if (isdigit(c))
+        {
+            tokens.push_back(handleNumber(pos, source)); // 处理数字
+        }
+        else if (isOperatorChar(c))
+        {
+            tokens.push_back(handleOperator(pos, source)); // 处理操作符
+        }
+        else if (isDelimiter(c))
+        {
+            tokens.push_back(handleDelimiter(pos, source)); // 处理分隔符
+        }
+        else
+        {
+            tokens.push_back(handleError(pos, source)); // 处理错误
+        }
+        break;
     }
+
     return tokens;
 }
