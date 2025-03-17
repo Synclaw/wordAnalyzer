@@ -3,7 +3,8 @@
 
 #include <string>
 
-enum class TokenType {
+enum class TokenType
+{
     KEYWORD = 1,
     IDENTIFIER,
     INTEGER,
@@ -13,7 +14,8 @@ enum class TokenType {
     ERROR
 };
 
-struct Token {
+struct Token
+{
     TokenType type;
     std::string lexeme;
 };
