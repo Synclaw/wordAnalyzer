@@ -66,7 +66,7 @@ int main()
                 buffer << in.rdbuf();
                 Tokenizer tokenizer;
                 cout << "正在词法分析..." << endl;
-                auto tokens = tokenizer.tokenize(buffer.str()); //buggggggggggggggg
+                auto tokens = tokenizer.tokenize(buffer.str());
                 cout << "词法分析完成" << endl;
                 if (writeTokensToFile(tokens, CurrentOutput))
                 {
@@ -83,7 +83,7 @@ int main()
     }
     catch (const exception &e)
     {
-        cerr << "致命错误: " << e.what() << endl;
+        cerr << "错误: " << e.what() << endl;
         return EXIT_FAILURE;
     }
     return EXIT_SUCCESS;
