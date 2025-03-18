@@ -39,6 +39,8 @@ void Tokenizer::handleComment(size_t &pos, const std::string &source)
             pos++;
         }
     }
+    else
+        return;
 }
 
 // 判断是否为关键字
@@ -77,12 +79,10 @@ Token Tokenizer::handleNumber(size_t &pos, const std::string &source)
 {
     size_t start = pos;
     bool has_dot = false;
-    int state = 0; // 0: init, 1: int, 2: dot, 3: fraction
-
+    int state = 0; // 0: 初始化, 1: 整数, 2: 点, 3: 浮点数
     while (pos < source.size())
     {
-        char c = source[pos];
-        if (isdigit(c))
+        if (isdigit(source[pos]))
         {
             if (state == 0)
                 state = 1;
@@ -90,7 +90,12 @@ Token Tokenizer::handleNumber(size_t &pos, const std::string &source)
                 state = 3;
             pos++;
         }
-        else if (c == '.' && !has_dot)
+        if (source[pos] == '-' && state == 0)
+        {
+            state = 1;
+            pos += 2;
+        }
+        else if (source[pos] == '.' && !has_dot)
         {
             has_dot = true;
             state = 2;
@@ -151,7 +156,6 @@ std::vector<Token> Tokenizer::tokenize(const std::string &source)
 {
     std::vector<Token> tokens;
     size_t pos = 0; // 初始化当前位置为0
-
     while (pos < source.size())
     {
         // 跳过空白
@@ -159,10 +163,7 @@ std::vector<Token> Tokenizer::tokenize(const std::string &source)
             pos++;
         if (pos >= source.size())
             break;
-
-        char c = source[pos];
-
-        if (pos + 1 < source.size() && source[pos] == '/' && (source[pos + 1] == '/' || source[pos + 1] == '*'))
+        else if (source[pos] == '/' && (source[pos + 1] == ('/' || '*')))
         {
             handleComment(pos, source); // 处理注释
         }
@@ -170,31 +171,31 @@ std::vector<Token> Tokenizer::tokenize(const std::string &source)
         {
             tokens.push_back(handleNumber(pos, source)); // 处理浮点数
         }
-        else if (isDelimiter(c))
+        else if (isDelimiter(source[pos]))
         {
             tokens.push_back(handleDelimiter(pos, source)); // 处理分隔符
         }
-        else if (isalpha(c) || c == '_')
+        else if (isalpha(source[pos]) || source[pos] == '_')
         {
             tokens.push_back(handleIdentifier(pos, source)); // 处理标识符
         }
-        else if (isdigit(c))
+        else if (isdigit(source[pos]))
         {
             tokens.push_back(handleNumber(pos, source)); // 处理数字
         }
-        else if (isOperatorChar(c))
+        else if (isOperatorChar(source[pos]))
         {
             tokens.push_back(handleOperator(pos, source)); // 处理操作符
         }
-        else if (isDelimiter(c))
+        else if (isDelimiter(source[pos]))
         {
             tokens.push_back(handleDelimiter(pos, source)); // 处理分隔符
         }
         else
         {
             tokens.push_back(handleError(pos, source)); // 处理错误
+            break;
         }
-        break;
     }
 
     return tokens;

@@ -1,5 +1,6 @@
 .vscode/
 sourceProgram*.txt
 analyzedProgram*.txt
+.log/
 build/
 wordanalyzer

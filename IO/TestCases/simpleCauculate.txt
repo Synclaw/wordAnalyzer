@@ -1,0 +1,8 @@
+/*this is a simple cauculate testcase */
+int cauculate(int a;int b){
+    int c = a + b;
+    int d = a * b;
+    int e = a / b;
+    int f = a - b;
+    write a , b , c , d , e , f;
+}
